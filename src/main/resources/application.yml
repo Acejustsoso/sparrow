@@ -1,0 +1,68 @@
+server:
+  port: 9999
+spring:
+  profiles:
+    active: debugcd
+  datasource:
+    # 使用H2数据库
+    type: com.zaxxer.hikari.HikariDataSource
+    # H2 database configuration.
+    driver-class-name: org.h2.Driver #配置JDBC Driver
+    url: jdbc:h2:file:~/db/sparrow;AUTO_SERVER=TRUE #配置h2数据库的连接地址
+    username: admin
+    password: 123456
+    tomcat:
+      init-s-q-l: SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci
+
+  h2:
+    console:
+      settings:
+        web-allow-others: true
+      path: /h2-console
+      enabled: true
+
+
+  # 数据库
+#  datasource:
+#    username: root
+#    url: jdbc:mysql://localhost:3306/sparrow-frame?useSSL=false&useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2b8
+#    password: 12345678
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      #create 启动时删数据库中的表，然后创建，退出时不删除数据表
+      #create-drop 启动时删数据库中的表，然后创建，退出时删除数据表 如果表不存在报错
+      #update 如果启动时表格式不一致则更新表，原有数据保留
+      #validate 项目启动表结构进行校验 如果不一致则报错
+      ddl-auto: update #设置ddl模式
+      use-new-id-generator-mappings: false
+
+    open-in-view: true
+    show-sql: true #启用SQL语句的日志记录
+    database: h2
+  main:
+    allow-bean-definition-overriding: true
+
+  #reids
+  redis:
+    database: 0
+    host: localhost
+    port: 6379
+    lettuce:
+      pool:
+        min-idle: 5
+        max-idle: 10
+        max-active: 8
+        max-wait: 1ms
+logging:
+  level:
+    run.sparrow.app: DEBUG
+    org.hibernate: INFO
+    org.hibernate.type.descriptor.sql.BasicBinder: INFO
+    org.hibernate.type.descriptor.sql.BasicExtractor: INFO
+  file:
+    path: ${sparrow.work-dir}/logs
+
+sparrow:
+  workDir: ${user.home}/sparrow-dev/
